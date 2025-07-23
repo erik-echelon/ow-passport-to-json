@@ -226,7 +226,7 @@ class ExcelToJSONConverter:
                 "services": [
                     {
                         "lineItemObjectId": f"LINE_{building_data['building_id']}",
-                        "serviceType": "janitorial",
+                        "serviceType": "RJS",
                         "serviceFrequency": "weekly",
                         "schedule": {
                             "sunday": building_data.get('sun', 0),
@@ -271,6 +271,10 @@ def main():
         page_icon="📊",
         layout="wide"
     )
+    
+    # Initialize session state
+    if 'initialized' not in st.session_state:
+        st.session_state.initialized = True
     
     st.title("📊 Excel Passport to JSON Converter")
     st.markdown("Convert your Excel Passport file to JSON format for API input")
@@ -341,38 +345,57 @@ def main():
                             st.code(json_string, language='json')
                         
                         with tab3:
-                            st.subheader("Download Options")
+                            st.subheader("Download & Copy Options")
+                            
+                            # Prepare JSON string once
+                            json_string = json.dumps(api_json, indent=2)
+                            
+                            # Use file hash for unique key instead of timestamp
+                            import hashlib
+                            file_hash = hashlib.md5(uploaded_file.name.encode()).hexdigest()[:8]
                             
                             # Generate filename
-                            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-                            customer_safe = converter.customer_info.get('customer_name', 'Unknown').replace(' ', '_')
-                            filename = f"{customer_safe}_api_input_{timestamp}.json"
+                            customer_safe = converter.customer_info.get('customer_name', 'Unknown').replace(' ', '_').replace('/', '_')
+                            filename = f"{customer_safe}_api_input.json"
                             
-                            # Prepare JSON string
-                            json_string = json.dumps(api_json, indent=2)
-                            json_bytes = json_string.encode('utf-8')
+                            # Alternative download approach - show the data and let browser handle it
+                            col1, col2 = st.columns(2)
                             
-                            # Download button with key to prevent re-runs
-                            st.download_button(
-                                label="📥 Download JSON File",
-                                data=json_bytes,
-                                file_name=filename,
-                                mime="application/json",
-                                key=f"download_btn_{timestamp}",
-                                help="Click to download the JSON file"
-                            )
+                            with col1:
+                                st.markdown("**Option 1: Direct Download**")
+                                # Simpler download button
+                                if st.button("📥 Prepare Download", key=f"prep_download_{file_hash}"):
+                                    st.success("✅ JSON prepared! Use the download link below:")
+                                    
+                                # Always show download button after JSON is ready
+                                st.download_button(
+                                    label="⬇️ Download JSON File",
+                                    data=json_string.encode('utf-8'),
+                                    file_name=filename,
+                                    mime="application/json",
+                                    key=f"download_{file_hash}"
+                                )
                             
-                            st.subheader("Copy for Postman")
-                            st.info("💡 **Tip:** Copy the JSON below and paste it directly into Postman's request body")
+                            with col2:
+                                st.markdown("**Option 2: Copy Text**")
+                                if st.button("📋 Show Copyable JSON", key=f"show_json_{file_hash}"):
+                                    st.session_state[f"show_json_{file_hash}"] = True
                             
-                            # Copyable text area with unique key
-                            st.text_area(
-                                "JSON for Postman:",
-                                value=json_string,
-                                height=200,
-                                key=f"json_textarea_{timestamp}",
-                                help="Copy this JSON and paste it into Postman's request body (raw JSON format)"
-                            )
+                            # Show copyable JSON if requested
+                            if st.session_state.get(f"show_json_{file_hash}", False):
+                                st.subheader("Copy for Postman")
+                                st.info("💡 **Tip:** Select all text below (Ctrl+A) and copy (Ctrl+C)")
+                                
+                                # Use code block instead of text_area to prevent hanging
+                                st.code(json_string, language='json')
+                                
+                                # Also provide a smaller text area for easier copying
+                                st.text_area(
+                                    "Copyable JSON (click in box and Ctrl+A to select all):",
+                                    value=json_string,
+                                    height=150,
+                                    key=f"copy_area_{file_hash}"
+                                )
                             
                             # Postman instructions
                             with st.expander("📋 Postman Setup Instructions"):
