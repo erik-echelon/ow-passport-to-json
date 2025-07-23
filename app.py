@@ -76,7 +76,7 @@ class ExcelToJSONConverter:
             
             # Extract data starting from row 4
             row = 4
-            while row <= ws.max_row and row <= 10000:  # Limit to prevent infinite loop
+            while row <= ws.max_row and row <= 100:  # Limit to prevent infinite loop
                 # Check if there's a customer name
                 customer_cell = ws[f'B{row}']
                 if not customer_cell.value:
