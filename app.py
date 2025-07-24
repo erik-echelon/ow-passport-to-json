@@ -90,11 +90,15 @@ class ExcelToJSONConverter:
                     cell = ws[f'{col}{row}']
                     value = cell.value
                     
-                    # Clean up the value
+                    # Clean up the value - preserve spacing for facility types
                     if value is None:
                         building_data[field] = '' if field in ['customer', 'building_id', 'address', 'city', 'state', 'building_type'] else 0
                     elif isinstance(value, str):
-                        building_data[field] = value.strip()
+                        # Don't strip building_type (facility type) - preserve exact spacing
+                        if field == 'building_type':
+                            building_data[field] = value
+                        else:
+                            building_data[field] = value.strip()
                     else:
                         building_data[field] = value
                 
