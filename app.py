@@ -82,6 +82,18 @@ class ExcelToJSONConverter:
                 if not customer_cell.value:
                     row += 1
                     continue
+                
+                # Check if building ID exists (essential field)
+                building_id_cell = ws[f'C{row}']
+                if not building_id_cell.value or str(building_id_cell.value).strip() == '':
+                    row += 1
+                    continue
+                
+                # Check if cleanable square footage exists and is valid
+                cleanable_sq_ft_cell = ws[f'K{row}']
+                if not cleanable_sq_ft_cell.value or cleanable_sq_ft_cell.value == 0:
+                    row += 1
+                    continue
                     
                 building_data = {}
                 
