@@ -225,7 +225,7 @@ class ExcelToJSONConverter:
             # Create building object
             building = {
                 "buildingRecordId": f"BLDG_{building_data['building_id']}",
-                "buildingId": building_data['building_id'],
+                "buildingId": str(building_data['building_id']),
                 "buildingName": f"{customer_name} - {building_data['building_id']}",
                 "facilityType": building_data['building_type'],
                 "location": {
