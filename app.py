@@ -56,19 +56,19 @@ class ExcelToJSONConverter:
                 'additional_costs': 'AB',  # ADDITIONAL COSTS
                 
                 # Equipment columns
-                'equipment_rental_1': 'AH',  # EQUIPMENT RENTAL #1
-                'contract_terms_1': 'AI',    # CONTRACT #1 TERMS
-                'equipment_rental_2': 'AJ',  # EQUIPMENT RENTAL #2
-                'contract_terms_2': 'AK',    # CONTRACT #2 TERMS
+                'equipment_rental_1': 'AI',  # EQUIPMENT RENTAL #1
+                'contract_terms_1': 'AJ',    # CONTRACT #1 TERMS
+                'equipment_rental_2': 'AK',  # EQUIPMENT RENTAL #2
+                'contract_terms_2': 'AL',    # CONTRACT #2 TERMS
                 
                 # Day Porter columns
-                'wage_adjustment': 'AO',     # WAGE ADJUSTMENT
-                'dp_sun': 'AQ', 'dp_mon': 'AR', 'dp_tue': 'AS', 'dp_wed': 'AT',
-                'dp_thu': 'AU', 'dp_fri': 'AV', 'dp_sat': 'AW',
+                'wage_adjustment': 'AP',     # WAGE ADJUSTMENT
+                'dp_sun': 'AR', 'dp_mon': 'AS', 'dp_tue': 'AT', 'dp_wed': 'AU',
+                'dp_thu': 'AV', 'dp_fri': 'AW', 'dp_sat': 'AX',
                 
                 # Supervisor columns
-                'sup_sun': 'AZ', 'sup_mon': 'BA', 'sup_tue': 'BB', 'sup_wed': 'BC',
-                'sup_thu': 'BD', 'sup_fri': 'BE', 'sup_sat': 'BF',
+                'sup_sun': 'BA', 'sup_mon': 'BB', 'sup_tue': 'BC', 'sup_wed': 'BD',
+                'sup_thu': 'BE', 'sup_fri': 'BF', 'sup_sat': 'BG',
             }
             
             self.buildings_data = []
